@@ -279,6 +279,10 @@ require('lazy').setup({
     'nvim-lualine/lualine.nvim',
     opts = {},
   },
+  require 'custom.plugins.flutter',
+
+  -- Dart-specific plugins
+  { 'dart-lang/dart-vim-plugin' },
   --
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
@@ -453,6 +457,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '-', ':cd ..<CR>', { desc = '- Go one level up a directory' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -994,5 +999,30 @@ require('lazy').setup({
   },
 })
 
+-- Flutter-specific keymaps
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'dart',
+  callback = function()
+    vim.keymap.set('n', '<leader>Fa', ':FlutterRun<CR>', { buffer = true, desc = 'Flutter Run' })
+    vim.keymap.set('n', '<leader>Fq', ':FlutterQuit<CR>', { buffer = true, desc = 'Flutter Quit' })
+    vim.keymap.set('n', '<leader>Fr', ':FlutterHotReload<CR>', { buffer = true, desc = 'Flutter Hot Reload' })
+    vim.keymap.set('n', '<leader>FR', ':FlutterRestart<CR>', { buffer = true, desc = 'Flutter Restart' })
+    vim.keymap.set('n', '<leader>Fd', ':FlutterDevices<CR>', { buffer = true, desc = 'Flutter Devices' })
+    vim.keymap.set('n', '<leader>Fe', ':FlutterEmulators<CR>', { buffer = true, desc = 'Flutter Emulators' })
+  end,
+})
+-- Optional: Set up autoformat on save for Dart files
+local format_sync_grp = vim.api.nvim_create_augroup('GoFormat', {})
+vim.api.nvim_create_autocmd('BufWritePre', {
+  pattern = '*.dart',
+  callback = function()
+    require('conform').format { bufnr = 0 }
+  end,
+  group = format_sync_grp,
+})
+
+-- Add Dart to the formatters list in conform.nvim
+
+--
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

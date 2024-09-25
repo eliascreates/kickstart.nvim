@@ -12,6 +12,7 @@ return {
   cmd = 'Neotree',
   keys = {
     { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+    { '-', ':cd ..<CR>', desc = '- Go one level up a directory' },
   },
   opts = {
     filesystem = {
