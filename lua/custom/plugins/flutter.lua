@@ -21,11 +21,6 @@ return {
         widget_guides = {
           enabled = true,
         },
-        closing_tags = {
-          highlight = 'ErrorMsg',
-          prefix = '//',
-          enabled = true,
-        },
         lsp = {
           color = {
             enabled = true,
